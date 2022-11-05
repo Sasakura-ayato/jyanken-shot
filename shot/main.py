@@ -1,13 +1,25 @@
+import os
 import cv2
+from PIL import Image
 
 # Variable
 CaptureDeviceID = 0
-CaptureResolution = [720,480,15]  # Width, Height, fps
+CaptureResolution = [1920,1080,15]  # Width, Height, fps
+OutputResolution = 64
+
+# Save Point
+ImageResizerFolder = './resized'
 
 # Definition
-def DataCrop():
+def ImageCrop():
     # Write code
     print(DataCrop)
+
+def ImageResizer(Resolution, path):
+    basename = os.path.splitext(os.path.basename(path))[0]
+    original = Image.open(path)
+    resized = original.resize((Resolution, Resolution))
+    resized.save(ImageResizerFolder + '/out_' + str(basename) + '.png', quality=90)
 
 if __name__ == "__main__":
     # Launch Camera
@@ -23,5 +35,5 @@ if __name__ == "__main__":
         if k == 27:
             break
 
-cap.release()
-cv2.destroyAllWindows()
+    cap.release()
+    cv2.destroyAllWindows()
