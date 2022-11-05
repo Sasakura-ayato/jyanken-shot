@@ -24,7 +24,7 @@ def ImageCrop():
 def ImageResizer(Resolution, path):
     basename = os.path.splitext(os.path.basename(path))[0]
     original = cv2.imread(path)
-    resized = cv2.resize(original, dsize=(OutputResolution, OutputResolution))
+    resized = cv2.resize(original, dsize=(Resolution, Resolution))
     cv2.imwrite(ImageResizerFolder + "/out_" + str(basename) + ".png", resized)
 
 
