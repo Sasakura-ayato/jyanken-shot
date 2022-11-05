@@ -9,7 +9,7 @@ OutputResolution = 64
 # Override Rectangle
 RectangleStartAt = ()
 RectangleEndAt = ()
-RectangleColor = (0, 255, 0) # Color(B, G, R)
+RectangleColor = (0, 255, 0)  # Color(B, G, R)
 RectangleLine = -1
 
 # Save Point
