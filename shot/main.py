@@ -20,7 +20,7 @@ ImageResizerFolder = "./resized"
 ImageCropperFolder = "./cropped"
 
 # Definition
-def ImageCropFromFile(path, cropSize: int = CroppingSize) -> bool:
+def ImageCropFromFile(path: str, cropSize: int = CroppingSize, Resolution: int = OutputResolution) -> bool:
     basename = os.path.splitext(os.path.basename(path))[0]
     original = cv2.imread(path)
     cropAreaStartLimitW, cropAreaStartLimitH = (
@@ -34,20 +34,23 @@ def ImageCropFromFile(path, cropSize: int = CroppingSize) -> bool:
         RandomStartAtH : RandomStartAtH + cropSize,
         RandomStartAtW : RandomStartAtW + cropSize,
     ]
-    cv2.imwrite(ImageCropperFolder + "/out_" + basename + ".png", cropped)
+    resized = cv2.resize(cropped, dsize=(Resolution, Resolution))
+    cv2.imwrite(ImageCropperFolder + "/out_" + basename + ".png", resized)
     return (
         True,
         [cropAreaStartLimitW, cropAreaStartLimitH],
         [RandomStartAtW, RandomStartAtH],
+        [RandomStartAtW + cropSize, RandomStartAtH + cropSize],
+        Resolution
     )
 
 
-def ImageResizerFromFile(path, Resolution=OutputResolution) -> bool:
+def ImageResizerFromFile(path: str, Resolution: int = OutputResolution) -> bool:
     basename = os.path.splitext(os.path.basename(path))[0]
     original = cv2.imread(path)
     resized = cv2.resize(original, dsize=(Resolution, Resolution))
     cv2.imwrite(ImageResizerFolder + "/out_" + str(basename) + ".png", resized)
-    return True
+    return True, Resolution
 
 
 if __name__ == "__main__":
