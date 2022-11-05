@@ -13,7 +13,7 @@ ImageResizerFolder = './resized'
 # Definition
 def ImageCrop():
     # Write code
-    print(DataCrop)
+    print('DataCrop')
 
 def ImageResizer(Resolution, path):
     basename = os.path.splitext(os.path.basename(path))[0]
