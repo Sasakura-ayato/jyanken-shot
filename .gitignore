@@ -129,5 +129,6 @@ dmypy.json
 .pyre/
 
 # User Definition
-**/**test.**
-**/out_
+**/**test**.**
+**/shot/cropped/**
+**/shot/resized/**
