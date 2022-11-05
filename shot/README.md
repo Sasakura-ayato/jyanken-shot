@@ -1,8 +1,8 @@
 # Data Crop による Augmentation
 
 ```python
-import main as datacrop
-datacrop.DataCrop()
+import main
+main.ImageCrop()
 ```
 
 <img src="../asset/image_resolution.png" width="400px">
