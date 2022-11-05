@@ -18,6 +18,7 @@ AreaEndAt = (
 # Save Point
 ImageResizerFolder = "./resized"
 ImageCropperFolder = "./cropped"
+ImageShotFolder = "./original"
 
 # Definition
 def ImageCropFromFile(path: str, cropSize: int = CroppingSize, Resolution: int = OutputResolution) -> bool:
@@ -52,15 +53,19 @@ def ImageResizerFromFile(path: str, Resolution: int = OutputResolution) -> bool:
     cv2.imwrite(ImageResizerFolder + "/out_" + str(basename) + ".png", resized)
     return True, Resolution
 
-
-if __name__ == "__main__":
+def LaunchCaptureDevice(CaptureDeviceID: int = CaptureDeviceID, CaptureResolution: tuple = CaptureResolution):
     # Launch Camera
     cap = cv2.VideoCapture(CaptureDeviceID)
     cap.set(3, CaptureResolution[0])
     cap.set(4, CaptureResolution[1])
     cap.set(5, CaptureResolution[2])
 
+    # Reset Variable
+    frame = 0
+    phase = 0
+
     while True:
+        frame = frame + 1
         resultBool, capture = cap.read()
         cv2.rectangle(
             capture,
@@ -81,3 +86,6 @@ if __name__ == "__main__":
 
     cap.release()
     cv2.destroyAllWindows()
+
+if __name__ == "__main__":
+    LaunchCaptureDevice()
