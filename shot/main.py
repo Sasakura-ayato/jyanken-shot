@@ -1,6 +1,7 @@
 import os
 import cv2
 import random
+import time
 
 # Main Variable
 CaptureDeviceID = 0
@@ -21,7 +22,8 @@ ImageCropperFolder = "./cropped"
 ImageShotFolder = "./original"
 
 # Definition
-def ImageCropFromFile(path: str, cropSize: int = CroppingSize, Resolution: int = OutputResolution) -> bool:
+def ImageCropFromFile(
+    path: str, cropSize: int = CroppingSize, Resolution: int = OutputResolution) -> bool:
     basename = os.path.splitext(os.path.basename(path))[0]
     original = cv2.imread(path)
     cropAreaStartLimitW, cropAreaStartLimitH = (
@@ -42,7 +44,7 @@ def ImageCropFromFile(path: str, cropSize: int = CroppingSize, Resolution: int =
         [cropAreaStartLimitW, cropAreaStartLimitH],
         [RandomStartAtW, RandomStartAtH],
         [RandomStartAtW + cropSize, RandomStartAtH + cropSize],
-        Resolution
+        Resolution,
     )
 
 
@@ -53,7 +55,10 @@ def ImageResizerFromFile(path: str, Resolution: int = OutputResolution) -> bool:
     cv2.imwrite(ImageResizerFolder + "/out_" + str(basename) + ".png", resized)
     return True, Resolution
 
-def LaunchCaptureDevice(CaptureDeviceID: int = CaptureDeviceID, CaptureResolution: tuple = CaptureResolution):
+
+def LaunchCaptureDevice(
+    CaptureDeviceID: int = CaptureDeviceID, CaptureResolution: tuple = CaptureResolution
+):
     # Launch Camera
     cap = cv2.VideoCapture(CaptureDeviceID)
     cap.set(3, CaptureResolution[0])
@@ -61,11 +66,11 @@ def LaunchCaptureDevice(CaptureDeviceID: int = CaptureDeviceID, CaptureResolutio
     cap.set(5, CaptureResolution[2])
 
     # Reset Variable
-    frame = 0
-    phase = 0
+    timer = 0
+    start = time.time()
 
     while True:
-        frame = frame + 1
+
         resultBool, capture = cap.read()
         cv2.rectangle(
             capture,
@@ -76,6 +81,24 @@ def LaunchCaptureDevice(CaptureDeviceID: int = CaptureDeviceID, CaptureResolutio
             lineType=cv2.LINE_8,
             shift=0,
         )
+        end = time.time()
+        timer = end - start
+        phase = timer % 4
+        cv2.putText(
+            capture,
+            text="Time: " + str(phase),
+            org=(100, 100),
+            fontFace=cv2.FONT_HERSHEY_COMPLEX,
+            fontScale=1.0,
+            color=(0, 255, 0),
+        )
+
+        # IndicateTiming
+        if 2.9 < phase < 3.1:
+            cv2.rectangle(capture, (0, 0), (int(CaptureResolution[0]), int(CaptureResolution[1])), (0, 0, 255), thickness=10, lineType=cv2.LINE_8, shift=0)
+        elif (0.0 < phase < 0.1) or (0.9 < phase < 1.1) or (1.9 < phase < 2.1) or (3.9 < phase < 4.0):
+            cv2.rectangle(capture, (0, 0), (int(CaptureResolution[0]), int(CaptureResolution[1])), (3, 212, 241), thickness=10, lineType=cv2.LINE_8, shift=0)
+
         cv2.imshow(
             "[Jyanken-Shot] Capture | When You Press ESC Key, Abort Program.", capture
         )
@@ -86,6 +109,7 @@ def LaunchCaptureDevice(CaptureDeviceID: int = CaptureDeviceID, CaptureResolutio
 
     cap.release()
     cv2.destroyAllWindows()
+
 
 if __name__ == "__main__":
     LaunchCaptureDevice()
