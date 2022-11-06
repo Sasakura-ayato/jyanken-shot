@@ -93,15 +93,23 @@ def LaunchCaptureDevice(
             color=(0, 255, 0),
         )
 
-        # IndicateTiming
+        # Indicate Timing
         if 2.9 < phase < 3.1:
-            cv2.rectangle(capture, (0, 0), (int(CaptureResolution[0]), int(CaptureResolution[1])), (0, 0, 255), thickness=10, lineType=cv2.LINE_8, shift=0)
+            cv2.rectangle(capture, (0, 0), (int(CaptureResolution[0]), int(CaptureResolution[1])), (0, 0, 255), thickness=30, lineType=cv2.LINE_8, shift=0)
         elif (0.0 < phase < 0.1) or (0.9 < phase < 1.1) or (1.9 < phase < 2.1) or (3.9 < phase < 4.0):
-            cv2.rectangle(capture, (0, 0), (int(CaptureResolution[0]), int(CaptureResolution[1])), (3, 212, 241), thickness=10, lineType=cv2.LINE_8, shift=0)
-
+            cv2.rectangle(capture, (0, 0), (int(CaptureResolution[0]), int(CaptureResolution[1])), (3, 212, 241), thickness=30, lineType=cv2.LINE_8, shift=0)
         cv2.imshow(
             "[Jyanken-Shot] Capture | When You Press ESC Key, Abort Program.", capture
         )
+        
+        # Shot Capture
+        if 3.0 <= phase < 3.1:
+            if flag == False:
+                cv2.imwrite(ImageShotFolder + "/shot_" + str(timer) + ".png", capture)
+                flag = True
+        else:
+            flag = False
+
         k = cv2.waitKey(1)
         if k == 27:  # [ESC] Key
             print("[Key]: Key ID = " + str(k))
