@@ -6,9 +6,11 @@
 
 ## Shot images
 
+### Setting Variable
+
 ```python
 # Main Variable
-CaptureDeviceID = 0
+CaptureDeviceID = 0 //
 CaptureResolution = (1920, 1080, 15)  # Width, Height, fps
 CroppingSize = 720
 OutputResolution = 64
