@@ -130,6 +130,6 @@ dmypy.json
 
 # User Definition
 **/**test**.**
-**/shot/cropped/**
-**/shot/resized/**
+**/shot/preprocessing/**.png
+**/shot/processing/**.png
 **/shot/original/**
