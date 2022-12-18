@@ -9,6 +9,9 @@ CaptureResolution = (1920, 1080, 15)  # Width, Height, fps
 CroppingSize = 720
 OutputResolution = 64
 
+ShotTiming = 3.5
+acceptShotTimingRange = 0.2
+
 # Override Rectangle
 AreaStartAt = ((CaptureResolution[0] - CaptureResolution[1]) / 2, 0)
 AreaEndAt = (
@@ -57,7 +60,7 @@ def ImageResizerFromFile(path: str, Resolution: int = OutputResolution) -> bool:
 
 
 def LaunchCaptureDevice(
-    CaptureDeviceID: int = CaptureDeviceID, CaptureResolution: tuple = CaptureResolution
+    CaptureDeviceID: int = CaptureDeviceID, CaptureResolution: tuple = CaptureResolution, shotTiming: float = ShotTiming, acceptShotTimingRange: float = acceptShotTimingRange
 ):
     # Launch Camera
     cap = cv2.VideoCapture(CaptureDeviceID)
@@ -82,11 +85,11 @@ def LaunchCaptureDevice(
             shift=0,
         )
         end = time.time()
-        timer = end - start
-        phase = timer % 4
+        timer = round(end - start, 1)
+        phase = round(timer % 4, 1)
         cv2.putText(
             capture,
-            text="Time: " + str(phase),
+            text="Time: " + str(timer),
             org=(100, 100),
             fontFace=cv2.FONT_HERSHEY_COMPLEX,
             fontScale=1.0,
@@ -98,6 +101,10 @@ def LaunchCaptureDevice(
             cv2.rectangle(capture, (0, 0), (int(CaptureResolution[0]), int(CaptureResolution[1])), (0, 0, 255), thickness=10, lineType=cv2.LINE_8, shift=0)
         elif (0.0 < phase < 0.1) or (0.9 < phase < 1.1) or (1.9 < phase < 2.1) or (3.9 < phase < 4.0):
             cv2.rectangle(capture, (0, 0), (int(CaptureResolution[0]), int(CaptureResolution[1])), (3, 212, 241), thickness=10, lineType=cv2.LINE_8, shift=0)
+
+        # Shot Image
+        if shotTiming < phase < shotTiming + acceptShotTimingRange:
+            cv2.imwrite('./original/shot_' + str(timer) + '.png', capture)
 
         cv2.imshow(
             "[Jyanken-Shot] Capture | When You Press ESC Key, Abort Program.", capture
