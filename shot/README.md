@@ -15,7 +15,7 @@ CaptureResolution = (1920, 1080, 15)  # Width, Height, fps
 CroppingSize = 720
 OutputResolution = 64
 
-ShotTiming = 3.5
+ShotTiming = 2.5
 acceptShotTimingRange = 0.2
 ```
 
