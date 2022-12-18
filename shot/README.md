@@ -2,7 +2,7 @@
 
 おまえのじゃんけんを撮らせろ
 
-<img src="../asset/img2.jpg" width="400px">
+<img src="../asset/img2.png" width="400px">
 
 ## Shot images
 
