@@ -20,15 +20,15 @@ AreaEndAt = (
 )
 
 # Save Point
-ImageResizerFolder = "./resized"
-ImageCropperFolder = "./cropped"
 ImageShotFolder = "./original"
+ImagePreprocessingFolder = "./preprocessing"
+ImageResizeFolder = "./processing"
 
 # Definition
 def ImageCropFromFile(
     path: str,
     cropSize: int = CroppingSize,
-    savePath: str = ImageCropperFolder + "/crop.png",
+    savePath: str = ImagePreprocessingFolder + "/crop.png",
 ) -> bool:
     basename = os.path.splitext(os.path.basename(path))[0]
     original = cv2.imread(path)
@@ -52,17 +52,9 @@ def ImageCropFromFile(
     )
 
 
-def ImageResizerFromFile(
-    path: str, savePath: str = ImageResizerFolder + "/out.png"
-) -> bool:
-    basename = os.path.splitext(os.path.basename(path))[0]
-    original = cv2.imread(path)
-    resized = cv2.resize(original, dsize=[OutputResolution, OutputResolution])
-    cv2.imwrite(savePath, resized)
-    return True
-
-
-def ImageSquareFromFile(path: str, savePath: str = ImageResizerFolder + "/sq.png"):
+def ImageSquareFromFile(
+    path: str, savePath: str = ImagePreprocessingFolder + "/sq.png"
+):
     basename = os.path.splitext(os.path.basename(path))[0]
     original = cv2.imread(path)
     squared = original[
@@ -70,6 +62,16 @@ def ImageSquareFromFile(path: str, savePath: str = ImageResizerFolder + "/sq.png
     ]
     print(AreaStartAt[1], AreaEndAt[1], AreaStartAt[0], AreaEndAt[0])
     cv2.imwrite(savePath, squared)
+    return True
+
+
+def ImageResizerFromFile(
+    path: str, savePath: str = ImageResizeFolder + "/out.png"
+) -> bool:
+    basename = os.path.splitext(os.path.basename(path))[0]
+    original = cv2.imread(path)
+    resized = cv2.resize(original, dsize=[OutputResolution, OutputResolution])
+    cv2.imwrite(savePath, resized)
     return True
 
 
@@ -95,7 +97,7 @@ def LaunchCaptureDevice(
         end = time.time()
         timer = round(end - start, 1)
         phase = round(timer % 4, 1)
-        
+
         # Shot Image
         if shotTiming < phase < shotTiming + acceptShotTimingRange:
             cv2.imwrite("./original/shot_" + str(timer) + ".png", capture)

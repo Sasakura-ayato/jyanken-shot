@@ -1,13 +1,43 @@
 import glob
 import main
+import shutil
+import os
 
-files = glob.glob("./original/*.png")
+originals = glob.glob("./original/*.png")
 
-# Files
-for file in files:
-    print(file)
+for original in originals:
+    print(original)
 
 # Cut
-for file in files:
+n = 0
+for original in originals:
     for i in range(10):
-        print(main.ImageCropFromFile(file))
+        n = n + 1
+        print(
+            main.ImageCropFromFile(
+                original, savePath=main.ImagePreprocessingFolder + "/" + str(n) + ".png"
+            )
+        )
+
+# Square
+for original in originals:
+    print(
+        main.ImageResizerFromFile(
+            original, savePath=main.ImagePreprocessingFolder + "/" + str(n) + ".png"
+        )
+    )
+
+# Resize
+n = 0
+resizeDatas = glob.glob("./preprocessing/*.png")
+for resizeData in resizeDatas:
+    n = n + 1
+    print(
+        main.ImageResizerFromFile(
+            resizeData, savePath=main.ImageResizeFolder + "/" + str(n) + ".png"
+        )
+    )
+
+# Delete
+for f in resizeDatas:
+    os.remove(f)
