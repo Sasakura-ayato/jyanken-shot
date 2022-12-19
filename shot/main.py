@@ -7,7 +7,7 @@ import time
 CaptureDeviceID = 0
 CaptureResolution = (1920, 1080, 15)  # Width, Height, fps
 CroppingSize = 720
-OutputResolution = 64
+OutputResolution = 32
 
 ShotTiming = 2.5
 acceptShotTimingRange = 0.2
@@ -82,8 +82,7 @@ def LaunchCaptureDevice(
     acceptShotTimingRange: float = acceptShotTimingRange,
 ):
     # Launch Camera
-    cap = cv2.VideoCapture(CaptureDeviceID)
-    cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc("H", "2", "6", "4"))
+    cap = cv2.VideoCapture(CaptureDeviceID, cv2.CAP_DSHOW)
     cap.set(3, CaptureResolution[0])
     cap.set(4, CaptureResolution[1])
     cap.set(5, CaptureResolution[2])
