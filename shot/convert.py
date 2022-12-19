@@ -1,7 +1,11 @@
 import glob
 import main
-import shutil
 import os
+import csv
+
+# Variable
+rsp = "rock"
+
 
 originals = glob.glob("./original/*.png")
 
@@ -37,6 +41,13 @@ for resizeData in resizeDatas:
             resizeData, savePath=main.ImageResizeFolder + "/" + str(n) + ".png"
         )
     )
+
+# Train Data TSV
+with open("./processing/train_master.tsv", "a", newline="") as f:
+    writer = csv.writer(f, delimiter="\t", lineterminator="\n")
+    for appendPath in glob.glob("./processing/*.png"):
+        writer.writerow([str(appendPath), rsp])
+
 
 # Delete
 for f in resizeDatas:
