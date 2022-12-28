@@ -1,16 +1,14 @@
-import os
 import cv2
-import random
 import time
 
 # Main Variable
 CaptureDeviceID = 0
 CaptureResolution = (640, 480, 15)  # Width, Height, fps
-CroppingSize = 360
-OutputResolution = 32
-
 ShotTiming = 2.8
 acceptShotTimingRange = 0.2
+
+# Save Directory
+ImageOriginalFolder = "./original/"
 
 # Override Rectangle
 AreaStartAt = ((CaptureResolution[0] - CaptureResolution[1]) / 2, 0)
@@ -18,62 +16,6 @@ AreaEndAt = (
     ((CaptureResolution[0] - CaptureResolution[1]) / 2) + CaptureResolution[1],
     CaptureResolution[1],
 )
-
-# Save Point
-ImageShotFolder = "./original"
-ImagePreprocessingFolder = "./preprocessing"
-ImageResizeFolder = "./processing"
-
-# Definition
-def ImageCropFromFile(
-    path: str,
-    cropSize: int = CroppingSize,
-    savePath: str = ImagePreprocessingFolder + "/crop.png",
-) -> bool:
-    basename = os.path.splitext(os.path.basename(path))[0]
-    original = cv2.imread(path)
-    cropAreaStartLimitH, cropAreaStartLimitW = (
-        original.shape[0] - cropSize,
-        original.shape[1] - cropSize,
-    )
-    RandomStartAtW, RandomStartAtH = random.randint(
-        0, cropAreaStartLimitW
-    ), random.randint(0, cropAreaStartLimitH)
-    cropped = original[
-        RandomStartAtH : RandomStartAtH + cropSize,
-        RandomStartAtW : RandomStartAtW + cropSize,
-    ]
-    cv2.imwrite(savePath, cropped)
-    return (
-        True,
-        [cropAreaStartLimitW, cropAreaStartLimitH],
-        [RandomStartAtW, RandomStartAtH],
-        [RandomStartAtW + cropSize, RandomStartAtH + cropSize],
-    )
-
-
-def ImageSquareFromFile(
-    path: str, savePath: str = ImagePreprocessingFolder + "/sq.png"
-):
-    basename = os.path.splitext(os.path.basename(path))[0]
-    original = cv2.imread(path)
-    squared = original[
-        int(AreaStartAt[1]) : int(AreaEndAt[1]), int(AreaStartAt[0]) : int(AreaEndAt[0])
-    ]
-    print(AreaStartAt[1], AreaEndAt[1], AreaStartAt[0], AreaEndAt[0])
-    cv2.imwrite(savePath, squared)
-    return True
-
-
-def ImageResizerFromFile(
-    path: str, savePath: str = ImageResizeFolder + "/out.png"
-) -> bool:
-    basename = os.path.splitext(os.path.basename(path))[0]
-    original = cv2.imread(path)
-    resized = cv2.resize(original, dsize=[OutputResolution, OutputResolution])
-    cv2.imwrite(savePath, resized)
-    return True
-
 
 def LaunchCaptureDevice(
     CaptureDeviceID: int = CaptureDeviceID,
@@ -100,7 +42,7 @@ def LaunchCaptureDevice(
 
         # Shot Image
         if shotTiming < phase < shotTiming + acceptShotTimingRange:
-            cv2.imwrite("./original/shot_" + str(timer) + ".png", capture)
+            cv2.imwrite(ImageOriginalFolder + "shot_" + str(timer) + ".png", capture)
 
         cv2.rectangle(
             capture,

@@ -4,7 +4,7 @@ import os
 import csv
 
 # Variable
-rsp = "rock"
+rsp = "paper"
 
 
 originals = glob.glob("./original/*.png")
@@ -13,7 +13,7 @@ for original in originals:
     print(original)
 
 # Cut
-n = 0
+n = 250
 for original in originals:
     for i in range(10):
         n = n + 1
@@ -32,7 +32,7 @@ for original in originals:
     )
 
 # Resize
-n = 0
+n = 500
 resizeDatas = glob.glob("./preprocessing/*.png")
 for resizeData in resizeDatas:
     n = n + 1
